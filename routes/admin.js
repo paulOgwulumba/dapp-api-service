@@ -18,7 +18,7 @@ Client.connect(err => {
       console.log('Admin Router connected to MongoDB database successfully');
       authenticationDatabase = Client.db().collection('auth_base');
     }
-  })
+})
 
 // set up path to .env file
 require('dotenv').config({path: path.join(__dirname, '..', '.env')});
