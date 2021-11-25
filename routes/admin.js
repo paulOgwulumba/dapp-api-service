@@ -51,6 +51,23 @@ admin.post('/log-in', async (request, response) => {
       console.log(`Failed Admin log in. Time: ${new Date().toLocaleString()}`)
       response.send({status: "failed", message: "wrong details given."})
     }
+})
+
+//cancels present session and redirect to log in page is triggered
+admin.get('/log-out', (request, response) => {
+  request.session.destroy( error => {
+    if(error){
+      console.error(error)
+      console.log(`Admin log out failed. Time: ${new Date().toLocaleString()}`)
+      response.send({status: "failed"})
+    }
+    else {
+      console.log(`Successful Admin log out confirmed. Time: ${new Date().toLocaleString()}`)
+      sessionID = process.env.SESSION_ID || '0XB245367';
+      response.send({status: "success", message: "Logged out successfully"})
+    }
   })
+})
+
 
 module.exports = { admin, sessionID }
