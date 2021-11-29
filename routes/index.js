@@ -31,14 +31,17 @@ const AdminAuth = async (request, response, next) => {
   let AdminToken;
   let sessionID;
   try{
+    console.log("request cookies check")
+    console.log(request.cookies)
     AdminToken = request.cookies["AdminToken"]
     sessionID = await authenticationDatabase.findOne({}) 
+    console.log(sessionID)
   }
   catch(error){
     console.log(error)
   }
 
-  if(sessionID === AdminToken){
+  if(sessionID.sessionID === AdminToken){
     next()
   }
   else{
@@ -73,9 +76,13 @@ router.get('/contract-information', async function(req, res, next) {
 /**
  * Insert new contract if no old one exists
  */
-router.post('/contract-information', AdminAuth, async function(req, res, next) {
+router.post('/contract-information', async function(req, res, next) {
   // get contract information from request body
-  const contract = req.body;
+  const contract = {
+    contract: req.body.contract,
+    isContract: true
+  };
+
 
   // check if a contract exists in database already
   let check = await primaryContractDatabase.findOne({});
@@ -87,6 +94,7 @@ router.post('/contract-information', AdminAuth, async function(req, res, next) {
   // else insert the new contract information to database
   else {
     try {
+      console.log(contract)
       await primaryContractDatabase.insertOne(contract);
       res.status(200).send({status: 'success'})
     } catch (e) {
@@ -99,7 +107,7 @@ router.post('/contract-information', AdminAuth, async function(req, res, next) {
 /**
  * Delete all contracts from database 
  */
-router.delete('/contract-information', AdminAuth, async function(req, res, next) {
+router.delete('/contract-information', AdminAuth,async function(req, res, next) {
   try {
     // retrieve all contracts from primary contract base 
     const contracts = await primaryContractDatabase.find({}).toArray();
