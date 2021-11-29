@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var cors = require('cors')
 
 const { Client } = require('../controller/utils')
 
@@ -48,6 +49,8 @@ const AdminAuth = async (request, response, next) => {
     response.status(403).send({status: "failed", message: 'unauthorised'});
   }
 }
+
+router.use(cors())
 
 /* GET Contract information and send as response. */
 router.get('/contract-information', async function(req, res, next) {
