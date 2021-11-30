@@ -83,6 +83,7 @@ router.post('/contract-information', async function(req, res, next) {
   // get contract information from request body
   const contract = {
     contract: req.body.contract,
+    address: req.body.address,
     isContract: true
   };
 
